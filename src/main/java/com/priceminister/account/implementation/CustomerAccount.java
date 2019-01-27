@@ -5,7 +5,7 @@ import com.priceminister.account.*;
 
 public class CustomerAccount implements Account {
 
-    public void add(Double addedAmount) {
+    public void add(Double addedAmount) throws IllegalNegativeAmountException {
         // TODO Auto-generated method stub
     }
 
@@ -15,7 +15,7 @@ public class CustomerAccount implements Account {
     }
 
     public Double withdrawAndReportBalance(Double withdrawnAmount, AccountRule rule) 
-    		throws IllegalBalanceException {
+    		throws IllegalBalanceException, IllegalNegativeAmountException{
         // TODO Auto-generated method stub
         return null;
     }
