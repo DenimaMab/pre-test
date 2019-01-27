@@ -34,6 +34,8 @@ public class CustomerAccountTest {
     @Before
     public void setUp() {
         customerAccount = new CustomerAccount();
+        rule = new CustomerAccountRule();
+
     }
 
     /**
@@ -41,8 +43,8 @@ public class CustomerAccountTest {
      */
     @Test
     public void testAccountWithoutMoneyHasZeroBalance() {
-        assertNotNull(customerAccount.getBalance());
-        assertEquals(new Double(0), customerAccount.getBalance());
+        assertNotNull("Balance must be initialized", customerAccount.getBalance());
+        assertEquals("New account must have a balance equal to 0.0", new Double(0), customerAccount.getBalance());
     }
 
     /**
@@ -51,7 +53,7 @@ public class CustomerAccountTest {
     @Test
     public void testAddPositiveAmount() throws IllegalNegativeAmountException {
         Double expectedBalance = customerAccount.getBalance() + 50.50;
-        customerAccount.add(50.50);
+        customerAccount.add(50.50, rule);
         assertEquals(expectedBalance, customerAccount.getBalance());
     }
 
@@ -60,7 +62,7 @@ public class CustomerAccountTest {
      */
     @Test(expected = IllegalNegativeAmountException.class)
     public void testAddNegativeAmountIllegalNegativeAmount() throws IllegalNegativeAmountException {
-        customerAccount.add(-50.50);
+        customerAccount.add(-50.50, rule);
     }
 
     /**
@@ -70,7 +72,6 @@ public class CustomerAccountTest {
     @Test(expected = IllegalBalanceException.class)
     public void testWithdrawAndReportBalanceIllegalBalance()
             throws IllegalBalanceException, IllegalNegativeAmountException {
-        rule = new CustomerAccountRule();
         customerAccount.withdrawAndReportBalance(5.0, rule);
     }
 
@@ -80,6 +81,9 @@ public class CustomerAccountTest {
     @Test
     public void testWithdrawAndReportBalance()
             throws IllegalBalanceException, IllegalNegativeAmountException {
+        //prepare balance before withdraw : add an amount greater than the amount to withdraw
+        customerAccount.add(100.0, rule);
+
         Double expectedBalance = customerAccount.getBalance() - 50.50;
         rule = new CustomerAccountRule();
 

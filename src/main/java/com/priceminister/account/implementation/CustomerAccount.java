@@ -4,20 +4,43 @@ import com.priceminister.account.*;
 
 
 public class CustomerAccount implements Account {
+    private Double balance;
 
-    public void add(Double addedAmount) throws IllegalNegativeAmountException {
-        // TODO Auto-generated method stub
+    public CustomerAccount(Double balance) {
+        this.balance = balance;
+    }
+
+    /**
+     * Default constructor to set the balance always at 0.0
+     */
+    public CustomerAccount() {
+        this(0.0);
+    }
+
+    public void add(Double addedAmount, AccountRule rule) throws IllegalNegativeAmountException {
+        if (rule.amountPermitted(addedAmount))
+            balance += addedAmount;
+        else
+            throw new IllegalNegativeAmountException();
     }
 
     public Double getBalance() {
-        // TODO Auto-generated method stub
-        return null;
+        return balance;
     }
 
-    public Double withdrawAndReportBalance(Double withdrawnAmount, AccountRule rule) 
-    		throws IllegalBalanceException, IllegalNegativeAmountException{
-        // TODO Auto-generated method stub
-        return null;
+    public Double withdrawAndReportBalance(Double withdrawnAmount, AccountRule rule)
+            throws IllegalBalanceException, IllegalNegativeAmountException {
+        Double newBalance = balance - withdrawnAmount;
+        // check that withdrawnAmount is positive
+        if (!rule.amountPermitted(withdrawnAmount)) {
+            throw new IllegalNegativeAmountException();
+        }// check that the resulting balance is permitted
+        else if (!rule.withdrawPermitted(newBalance)) {
+            throw new IllegalBalanceException(newBalance);
+        }
+        // if all rules check is OK replace the balance.
+        balance = newBalance;
+        return balance;
     }
 
 }

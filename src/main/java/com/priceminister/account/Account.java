@@ -9,8 +9,9 @@ public interface Account {
     /**
      * Adds money to this account.
      * @param addedAmount - the money to add
+     * @param rule - the AccountRule that defines which amount is allowed
      */
-    void add(Double addedAmount) throws IllegalNegativeAmountException;
+    void add(Double addedAmount, AccountRule rule) throws IllegalNegativeAmountException;
     
     /**
      * Withdraws money from the account.
